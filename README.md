@@ -140,11 +140,17 @@ Determine fair ranking among employees or students.
 
 ```sql
 WITH ranked_emps AS (
-  SELECT *,
-    RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS rank_position
+  SELECT emp_id,
+         emp_name,
+         department,
+         region,
+         salary,
+         hire_date,
+         RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS rank_position
   FROM employees
 )
-SELECT * FROM ranked_emps WHERE rank_position <= 3;
+SELECT * FROM ranked_emps
+WHERE rank_position <= 3;
 ```
 
 ### 📝 Explanation
@@ -163,11 +169,17 @@ Performance reviews and rewards allocation.
 
 ```sql
 WITH first_emps AS (
-  SELECT *,
-    ROW_NUMBER() OVER (PARTITION BY department ORDER BY hire_date) AS row_num
+  SELECT emp_id,
+         emp_name,
+         department,
+         region,
+         salary,
+         hire_date,
+         ROW_NUMBER() OVER (PARTITION BY department ORDER BY hire_date) AS row_num
   FROM employees
 )
-SELECT * FROM first_emps WHERE row_num <= 2;
+SELECT * FROM first_emps
+WHERE row_num <= 2;
 ```
 
 ### 📝 Explanation
