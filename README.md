@@ -6,7 +6,7 @@
 
 ## 👥 Group Members
 - **Moise Ishimwe**
-- **[Your Teammate’s Name]**
+- **Audace Karenzi**
 
 ---
 
@@ -65,17 +65,15 @@ CREATE TABLE employees (
   hire_date DATE
 );
 
-INSERT INTO employees (emp_id, emp_name, department, salary, hire_date) VALUES
-(1, 'Alice', 'HR', 5000, '2020-01-15'),
-(2, 'Bob', 'HR', 5500, '2019-03-10'),
-(3, 'Charlie', 'IT', 7000, '2021-06-01'),
-(4, 'Diana', 'IT', 7000, '2021-07-20'),
-(5, 'Eve', 'IT', 7200, '2018-11-23'),
-(6, 'Frank', 'Marketing', 4000, '2020-05-14'),
-(7, 'Grace', 'Marketing', 4000, '2021-09-01'),
-(8, 'Heidi', 'Marketing', 4500, '2019-12-11'),
-(9, 'Ivan', 'HR', 5200, '2022-01-05'),
-(10, 'Judy', 'IT', 7100, '2023-04-18');
+INSERT INTO employees VALUES (1, 'Alice', 'HR', 'East', 5000, TO_DATE('2020-01-10', 'YYYY-MM-DD'));
+INSERT INTO employees VALUES (2, 'Bob', 'HR', 'East', 5200, TO_DATE('2021-03-15', 'YYYY-MM-DD'));
+INSERT INTO employees VALUES (3, 'Charlie', 'IT', 'West', 6500, TO_DATE('2020-06-20', 'YYYY-MM-DD'));
+INSERT INTO employees VALUES (4, 'David', 'IT', 'West', 6500, TO_DATE('2021-04-12', 'YYYY-MM-DD'));
+INSERT INTO employees VALUES (5, 'Eve', 'Finance', 'East', 7000, TO_DATE('2019-11-01', 'YYYY-MM-DD'));
+INSERT INTO employees VALUES (6, 'Frank', 'Finance', 'West', 6900, TO_DATE('2022-02-10', 'YYYY-MM-DD'));
+INSERT INTO employees VALUES (7, 'Grace', 'HR', 'East', 5300, TO_DATE('2022-05-05', 'YYYY-MM-DD'));
+INSERT INTO employees VALUES (8, 'Hank', 'Finance', 'East', 7000, TO_DATE('2023-01-01', 'YYYY-MM-DD'));
+
 ```
 
 ### 📝 Explanation
@@ -87,15 +85,19 @@ We created a simple but realistic dataset of employees, distributed across diffe
 **File**: `lag_lead_comparison.sql`
 
 ```sql
-SELECT
-  emp_id, emp_name, department, salary,
-  LAG(salary) OVER (PARTITION BY department ORDER BY salary) AS prev_salary,
-  LEAD(salary) OVER (PARTITION BY department ORDER BY salary) AS next_salary,
-  CASE 
-    WHEN salary > LAG(salary) OVER (PARTITION BY department ORDER BY salary) THEN 'HIGHER'
-    WHEN salary < LAG(salary) OVER (PARTITION BY department ORDER BY salary) THEN 'LOWER'
-    ELSE 'EQUAL'
-  END AS comparison_to_prev
+SELECT emp_id,
+       emp_name,
+       department,
+       region,
+       salary,
+       hire_date,
+       salary - LAG(salary) OVER (ORDER BY emp_id) AS diff_prev,
+       salary - LEAD(salary) OVER (ORDER BY emp_id) AS diff_next,
+       CASE 
+           WHEN salary > LAG(salary) OVER (ORDER BY emp_id) THEN 'HIGHER'
+           WHEN salary < LAG(salary) OVER (ORDER BY emp_id) THEN 'LOWER'
+           ELSE 'EQUAL'
+       END AS compare_prev
 FROM employees;
 ```
 
