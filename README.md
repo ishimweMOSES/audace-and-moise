@@ -65,7 +65,7 @@ CREATE TABLE employees (
   hire_date DATE
 );
 
-
+```sql
 
 INSERT INTO employees VALUES (1, 'Alice', 'HR', 'East', 5000, TO_DATE('2020-01-10', 'YYYY-MM-DD'));
 INSERT INTO employees VALUES (2, 'Bob', 'HR', 'East', 5200, TO_DATE('2021-03-15', 'YYYY-MM-DD'));
